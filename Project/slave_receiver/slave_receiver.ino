@@ -49,15 +49,15 @@ byte dataToSend[2]={0x30, 0x00};
 void setup() {
   Wire.begin(ISP_SLAVE_ADDRESS);
   Wire.onReceive(receiveEvent);
-  Wire.onRequest(requestEvent);
+//  Wire.onRequest(requestEvent);
   Serial.begin(9600);
 }
 
 void loop() {
   delay(100);
-  if(DATA_LENGTH > 2){
-    processReceivedData();
-  }
+//  if(DATA_LENGTH > 2){
+//    processReceivedData();
+//  }
 }
 
 void receiveEvent() {
@@ -72,13 +72,13 @@ void receiveEvent() {
 void processReceivedData() {
   // Xử lý dữ liệu nhận được, ví dụ:
   Serial.print("Received Data: ");
-//  for (int i = 0; i < DATA_LENGTH; i++) {
-//    Serial.print(receivedData[i], HEX);
-//    //Serial.print(receivedData[i]);
-//    Serial.print(" ");
-//  }
-//  Serial.println();
-  Serial.println(receivedData);
+  for (int i = 0; i < DATA_LENGTH; i++) {
+    Serial.print(receivedData[i], HEX);
+    //Serial.print(receivedData[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
+  //Serial.println(receivedData);
 }
 
 void requestEvent() {
