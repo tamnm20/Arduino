@@ -6,10 +6,10 @@ Sơ đồ kết nối
 
 | CP210x       		  | esp01-s |
 |:-------------------:| --------:|
-| 3v3   |     3v3    |
-| gnd   |     gnd    |
-| TX    |     RX    |
-| RX    |     TX    |
+| 3v3   |3v3    |
+| gnd   |gnd    |
+| TX    |RX    |
+| RX    |TX    |
 
 ## Bước 2: Set up app TX (COM Arduino or Hercules)
 
@@ -91,7 +91,7 @@ Bây giờ, khi chúng ta mở trình duyệt web và nhập địa chỉ IP c�
 
 Đây là yêu cầu HTTP mà máy tính của chúng ta gửi đến máy chủ để lấy một tệp. Nó chứa một số thông tin thú vị như tệp bạn muốn truy xuất, tên và phiên bản của trình duyệt, hệ điều hành bạn đang sử dụng, ngôn ngữ bạn muốn nhận tệp và nhiều thông tin khác.
 
-##Bước 10: Các lệnh AT cơ bản - Gửi và hiển thị dữ liệu
+## Bước 10: Các lệnh AT cơ bản - Gửi và hiển thị dữ liệu
 Chúng ta có thể sử dụng các lệnh sau để gửi một số dữ liệu và hiển thị nó trong cửa sổ trình duyệt web:
 
 
