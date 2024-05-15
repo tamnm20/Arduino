@@ -1,4 +1,4 @@
-e #include <SoftwareSerial.h>
+#include <SoftwareSerial.h>
 #define TIMEOUT 5000 // mS
 SoftwareSerial mySerial(7, 6); // RX, TX
 const int button = 11;
@@ -10,8 +10,8 @@ void setup()
  pinMode(button,INPUT); 
  Serial.begin(115200);
  mySerial.begin(115200);
- //SendCommand("AT+RST", "OK");
- delay(5000);
+ SendCommand("AT+RST", "OK");
+ delay(3000);
  SendCommand("AT+CWMODE=1","OK");
  SendCommand("AT+CIFSR", "OK");
  SendCommand("AT+CIPMUX=1","OK");
@@ -64,10 +64,11 @@ boolean echoFind(String keyword){
   if (mySerial.available()){
     char ch = mySerial.read();
     Serial.write(ch);
-    if (ch == keyword[current_char])
+    if (ch == keyword[current_char]){
       if (++current_char == keyword_length){
        Serial.println();
        return true;
+      }
     }
    }
   }
