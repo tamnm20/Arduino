@@ -1,0 +1,13 @@
+EF01FFFFFFFF0100071300000000001B
+
+EF01FFFFFFFF0100030F0013
+
+EF01FFFFFFFF0100031D0021 ////Read finger template numbers
+
+EF01FFFFFFFF010003010005//Ask the sensor to take an image of the finger pressed on surface
+
+EF01FFFFFFFF01000402010008//Ask the sensor to convert image to feature template
+
+EF01FFFFFFFF010008040100000040004E //Ask the sensor to search the current slot fingerprint features to
+                                                                                    match saved templates. The matching location is stored in <b>fingerID</b> and
+                                                                                    the matching confidence in <b>confidence</b>
