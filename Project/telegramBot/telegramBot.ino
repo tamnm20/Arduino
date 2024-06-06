@@ -16,8 +16,11 @@
 #include <ArduinoJson.h>
 
 // Replace with your network credentials
-const char* ssid = "Active 3_4769";
-const char* password = "244466666";
+//const char* ssid = "Active 3_4769";
+//const char* password = "244466666";
+
+const char* ssid = "cuckoo";
+const char* password = "68686868";
 
 // Initialize Telegram BOT
 #define BOTtoken "5765659274:AAF1MrBZwC52uunp-t2CE6KhQn2yEmvKaik"  // your Bot Token (Get from Botfather)
@@ -25,7 +28,7 @@ const char* password = "244466666";
 // Use @myidbot to find out the chat ID of an individual or a group
 // Also note that you need to click "start" on a bot before it can
 // message you
-#define CHAT_ID "XXXXXXXXXX"
+#define CHAT_ID "5348160018"
 
 #ifdef ESP8266
   X509List cert(TELEGRAM_CERTIFICATE_ROOT);
@@ -49,6 +52,8 @@ void handleNewMessages(int numNewMessages) {
   for (int i=0; i<numNewMessages; i++) {
     // Chat id of the requester
     String chat_id = String(bot.messages[i].chat_id);
+    Serial.print("chat_id: ");
+    Serial.println(chat_id);
     if (chat_id != CHAT_ID){
       bot.sendMessage(chat_id, "Unauthorized user", "");
       continue;
