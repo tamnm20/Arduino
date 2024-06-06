@@ -46,6 +46,8 @@ void handleNewMessages(int numNewMessages)
   for (int i = 0; i < numNewMessages; i++)
   {
     String chat_id = bot.messages[i].chat_id;
+    Serial.print("chat_id: ");
+    Serial.println(chat_id);
     String text = bot.messages[i].text;
 
     String from_name = bot.messages[i].from_name;
@@ -85,7 +87,7 @@ void handleNewMessages(int numNewMessages)
     else if (text=="off")  
         {   
       digitalWrite(LED, 0);    
-      bot.sendMessage(chat_id, "The Led is now OFF");   
+      bot.sendMessage(chat_id, "The Led is now OFF");
     }  
   }
 }

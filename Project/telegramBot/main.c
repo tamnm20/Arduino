@@ -15,6 +15,19 @@ ESP8266
 ║   SEGMENT  BYTES    DESCRIPTION
 ╚══ IROM     368604   code in flash 
 
+. Variables and constants in RAM (global, static), used 29356 / 80192 bytes (36%)
+║   SEGMENT  BYTES    DESCRIPTION
+╠══ DATA     1576     initialized variables
+╠══ RODATA   1916     constants       
+╚══ BSS      25864    zeroed variables
+. Instruction RAM (IRAM_ATTR, ICACHE_RAM_ATTR), used 60603 / 65536 bytes (92%)
+║   SEGMENT  BYTES    DESCRIPTION
+╠══ ICACHE   32768    reserved space for flash instruction cache
+╚══ IRAM     27835    code in IRAM    
+. Code in flash (default, ICACHE_FLASH_ATTR), used 355752 / 1048576 bytes (33%)
+║   SEGMENT  BYTES    DESCRIPTION
+╚══ IROM     355752   code in flash 
+
 You can use this token to access HTTP API:
 5765659274:AAF1MrBZwC52uunp-t2CE6KhQn2yEmvKaik
 
