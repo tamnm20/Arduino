@@ -6,6 +6,7 @@
   Example based on the Universal Arduino Telegram Bot Library: https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot/blob/master/examples/ESP8266/FlashLED/FlashLED.ino
 */
 //#define ESP32
+//#define ESP8266
 #ifdef ESP32
   #include <WiFi.h>
 #else
@@ -16,11 +17,11 @@
 #include <ArduinoJson.h>
 
 // Replace with your network credentials
-//const char* ssid = "Active 3_4769";
-//const char* password = "244466666";
+const char* ssid = "Active 3_4769";
+const char* password = "244466666";
 
-const char* ssid = "cuckoo";
-const char* password = "68686868";
+//const char* ssid = "cuckoo";
+//const char* password = "68686868";
 
 // Initialize Telegram BOT
 #define BOTtoken "5765659274:AAF1MrBZwC52uunp-t2CE6KhQn2yEmvKaik"  // your Bot Token (Get from Botfather)
@@ -55,7 +56,7 @@ void handleNewMessages(int numNewMessages) {
     Serial.print("chat_id: ");
     Serial.println(chat_id);
     if (chat_id != CHAT_ID){
-      bot.sendMessage(chat_id, "Unauthorized user", "");
+      bot.sendMessage(chat_id, "Unauthorized user");
       continue;
     }
     
@@ -71,27 +72,27 @@ void handleNewMessages(int numNewMessages) {
       welcome += "/led_on to turn GPIO ON \n";
       welcome += "/led_off to turn GPIO OFF \n";
       welcome += "/state to request current GPIO state \n";
-      bot.sendMessage(chat_id, welcome, "");
+      bot.sendMessage(chat_id, welcome);
     }
 
     if (text == "/led_on") {
-      bot.sendMessage(chat_id, "LED state set to ON", "");
+      bot.sendMessage(chat_id, "LED state set to ON");
       ledState = HIGH;
       digitalWrite(ledPin, ledState);
     }
     
     if (text == "/led_off") {
-      bot.sendMessage(chat_id, "LED state set to OFF", "");
+      bot.sendMessage(chat_id, "LED state set to OFF");
       ledState = LOW;
       digitalWrite(ledPin, ledState);
     }
     
     if (text == "/state") {
       if (digitalRead(ledPin)){
-        bot.sendMessage(chat_id, "LED is ON", "");
+        bot.sendMessage(chat_id, "LED is ON");
       }
       else{
-        bot.sendMessage(chat_id, "LED is OFF", "");
+        bot.sendMessage(chat_id, "LED is OFF");
       }
     }
   }
@@ -99,12 +100,6 @@ void handleNewMessages(int numNewMessages) {
 
 void setup() {
   Serial.begin(115200);
-
-  #ifdef ESP8266
-    configTime(0, 0, "pool.ntp.org");      // get UTC time via NTP
-    client.setTrustAnchors(&cert); // Add root certificate for api.telegram.org
-  #endif
-
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, ledState);
   
@@ -116,10 +111,23 @@ void setup() {
   #endif
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.println("Connecting to WiFi..");
+    Serial.print("\nConnecting to WiFi..");
   }
   // Print ESP32 Local IP Address
   Serial.println(WiFi.localIP());
+  #ifdef ESP8266
+    Serial.print("Retrieving time: ");
+    configTime(0, 0, "pool.ntp.org");      // get UTC time via NTP
+    client.setTrustAnchors(&cert); // Add root certificate for api.telegram.org
+    time_t now = time(nullptr);
+    while (now < 24 * 3600)
+    {
+      Serial.print(".");
+      delay(100);
+      now = time(nullptr);
+    }
+    Serial.println(now);
+  #endif
 }
 
 void loop() {
