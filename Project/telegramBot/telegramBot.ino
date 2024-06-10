@@ -5,8 +5,6 @@
   Project created using Brian Lough's Universal Telegram Bot Library: https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
   Example based on the Universal Arduino Telegram Bot Library: https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot/blob/master/examples/ESP8266/FlashLED/FlashLED.ino
 */
-//#define ESP32
-//#define ESP8266
 #ifdef ESP32
   #include <WiFi.h>
 #else
