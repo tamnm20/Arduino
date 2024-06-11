@@ -18,7 +18,8 @@ IPAddress ap_subnet(255, 255, 255, 0);
 ESP8266WebServer server(80);
 
 // Initialize Telegram BOT
-#define BOTtoken "5765659274:AAF1MrBZwC52uunp-t2CE6KhQn2yEmvKaik"  // your Bot Token (Get from Botfather)
+//#define BOTtoken "5765659274:AAF1MrBZwC52uunp-t2CE6KhQn2yEmvKaik"  // your Bot Token (Get from Botfather)
+#define BOTtoken "7082207773:AAGKeothCOSTOA9Sfbz1IgElPxsvU4LDR0Y"
 String CHAT_ID = "5348160018";
 
 X509List cert(TELEGRAM_CERTIFICATE_ROOT);
