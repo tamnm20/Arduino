@@ -19,7 +19,7 @@ ESP8266WebServer server(80);
 
 // Initialize Telegram BOT
 #define BOTtoken "5765659274:AAF1MrBZwC52uunp-t2CE6KhQn2yEmvKaik"  // your Bot Token (Get from Botfather)
-#define CHAT_ID "5348160018"
+String CHAT_ID = "5348160018";
 
 X509List cert(TELEGRAM_CERTIFICATE_ROOT);
 
@@ -44,7 +44,16 @@ void handleNewMessages(int numNewMessages) {
     Serial.print("chat_id: ");
     Serial.println(chat_id);
     if (chat_id != CHAT_ID){
-      bot.sendMessage(chat_id, "Unauthorized user");
+      String text = bot.messages[i].text;
+      if (text != "/setup") {
+        bot.sendMessage(chat_id, "Group is not registered.\nPlease send /setup to set a group to be an alarm group \n");
+      }
+      if (text == "/setup") {
+        CHAT_ID = chat_id;
+        saveChatID();
+        String welcome = "The chat group has been set to an alarm group.\n\n";
+        bot.sendMessage(chat_id, welcome);
+      }
       continue;
     }
     
@@ -83,6 +92,10 @@ void handleNewMessages(int numNewMessages) {
         bot.sendMessage(chat_id, "LED is OFF");
       }
     }
+//    if (text == "Liên heo") {
+//      String welcome = "Đúng vậy. Theo tôi được biết Liên chính là 🐷.\n\n";
+//      bot.sendMessage(chat_id, welcome);
+//    }
   }
 }
 
@@ -112,13 +125,12 @@ void setup() {
     Serial.println("\nWiFi connected successfully");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
-    Serial.print("Retrieving time: ");
+    Serial.print("Retrieving time:...... ");
     configTime(0, 0, "pool.ntp.org");      // get UTC time via NTP
     client.setTrustAnchors(&cert); // Add root certificate for api.telegram.org
     time_t now = time(nullptr);
     while (now < 24 * 3600)
     {
-      Serial.print(".");
       delay(100);
       now = time(nullptr);
     }
@@ -127,17 +139,13 @@ void setup() {
 }
 
 void loop() {
-//  if (millis() > lastTimeBotRan + botRequestDelay)  {
-    int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+  int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
 
-    while(numNewMessages) {
-      Serial.println("got response");
-      handleNewMessages(numNewMessages);
-      numNewMessages = bot.getUpdates(bot.last_message_received + 1);
-    }
-//    lastTimeBotRan = millis();
-//  }
-  //server.handleClient();
+  while(numNewMessages) {
+    Serial.println("got response");
+    handleNewMessages(numNewMessages);
+    numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+  }
   if (WiFi.status() != WL_CONNECTED) {
     server.handleClient();
   }
@@ -180,6 +188,7 @@ void readCredentials() {
   for (int i = 0; i < 32; ++i) {
     ssid[i] = EEPROM.read(i);
     password[i] = EEPROM.read(32 + i);
+    CHAT_ID[i] = EEPROM.read(64 + i);
   }
 }
 
@@ -190,13 +199,20 @@ void saveCredentials() {
   }
   EEPROM.commit();
 }
+void saveChatID() {
+  for (int i = 0; i < 32; ++i) {
+    EEPROM.write(64 + i, CHAT_ID[i]);
+  }
+  EEPROM.commit();
+}
 void handleSerialInput() {
   if (Serial.available()) {
     String command = Serial.readStringUntil('\n');
     command.trim(); // Loại bỏ các ký tự xuống dòng và khoảng trắng
     if (command == "AT+ALARM=1") {
       Serial.println("Canh bao chay!!!Ve nha ngay!!!");
-      bot.sendMessage("5348160018", "Canh bao chay!!!Ve nha ngay!!!");
+      //bot.sendMessage(CHAT_ID, "Canh bao chay!!!Ve nha ngay!!!");
+      bot.sendMessage(CHAT_ID, "🔔🔔🔔Cảnh báo cháy!!!🆘🆘🆘Gọi cứu hỏa ngay!!!");
     } else {}
   }
 }

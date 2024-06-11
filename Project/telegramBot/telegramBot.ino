@@ -1,10 +1,10 @@
-/*
-  Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/telegram-control-esp32-esp8266-nodemcu-outputs/
-  
-  Project created using Brian Lough's Universal Telegram Bot Library: https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
-  Example based on the Universal Arduino Telegram Bot Library: https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot/blob/master/examples/ESP8266/FlashLED/FlashLED.ino
-*/
+///*
+//  Rui Santos
+//  Complete project details at https://RandomNerdTutorials.com/telegram-control-esp32-esp8266-nodemcu-outputs/
+//  
+//  Project created using Brian Lough's Universal Telegram Bot Library: https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
+//  Example based on the Universal Arduino Telegram Bot Library: https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot/blob/master/examples/ESP8266/FlashLED/FlashLED.ino
+//*/
 #ifdef ESP32
   #include <WiFi.h>
 #else
@@ -15,7 +15,7 @@
 #include <ArduinoJson.h>
 
 // Replace with your network credentials
-const char* ssid = "Active 3_4769";
+const char* ssid = "Active3_0207";
 const char* password = "244466666";
 
 //const char* ssid = "cuckoo";
@@ -107,9 +107,9 @@ void setup() {
   #ifdef ESP32
     client.setCACert(TELEGRAM_CERTIFICATE_ROOT); // Add root certificate for api.telegram.org
   #endif
+  Serial.print("\nConnecting to WiFi.....");
   while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.print("\nConnecting to WiFi..");
+    delay(100);
   }
   // Print ESP32 Local IP Address
   Serial.println(WiFi.localIP());
@@ -140,3 +140,45 @@ void loop() {
     lastTimeBotRan = millis();
   }
 }
+//#include <ESP8266WiFi.h>
+//#include <WiFiClientSecure.h>
+//#include <TelegramBot.h>
+//#define LED 2 //led pin number
+//// Initialize Wifi connection to the router 
+//const char* ssid     = "Active3_0207"; 
+//const char* password = "244466666"; 
+//// Initialize Telegram BOT 
+//const char BotToken[] = "5765659274:AAF1MrBZwC52uunp-t2CE6KhQn2yEmvKaik"; 
+//WiFiClientSecure net_ssl; 
+//TelegramBot bot (BotToken, net_ssl); 
+//void setup()  
+//{   
+//  Serial.begin(115200);   
+//  // attempt to connect to Wifi network:   
+//  Serial.print("\nConnecting Wifi: ");   
+//  Serial.println(ssid);   
+//  WiFi.mode(WIFI_STA);
+//  WiFi.begin(ssid, password);
+//  while (WiFi.status() != WL_CONNECTED) {
+//    delay(1000);
+//    Serial.print(".");
+//  }
+//  Serial.println("Connected to WiFi");
+//  bot.begin();   
+//  pinMode(LED, OUTPUT); 
+//  digitalWrite(LED, 1);   
+//}   
+//void loop()  
+//{   
+//  message m = bot.getUpdates(); // Read new messages   
+//  if (m.text.equals("on"))  
+//  {   
+//    digitalWrite(LED, 1);    
+//    bot.sendMessage(m.chat_id, "The Led is now ON");   
+//  }   
+//  else if (m.text.equals("off"))  
+//  {   
+//    digitalWrite(LED, 0);    
+//    bot.sendMessage(m.chat_id, "The Led is now OFF");
+//  }   
+//}   
