@@ -33,6 +33,7 @@ unsigned long lastTimeBotRan;
 
 const int ledPin = 2;
 bool ledState = LOW;
+uint8_t connect_state = 0;
 
 // Handle what happens when you receive new messages
 void handleNewMessages(int numNewMessages) {
@@ -104,7 +105,7 @@ void setup() {
   Serial.begin(115200);
   EEPROM.begin(512);
   pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, ledState);
+  digitalWrite(ledPin, 1);
   
   // Read SSID and Password from EEPROM
   readCredentials();
@@ -126,6 +127,8 @@ void setup() {
     Serial.println("\nWiFi connected successfully");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
+    digitalWrite(ledPin, 0);
+    connect_state = 1;
     Serial.print("Retrieving time:...... ");
     configTime(0, 0, "pool.ntp.org");      // get UTC time via NTP
     client.setTrustAnchors(&cert); // Add root certificate for api.telegram.org
@@ -136,6 +139,7 @@ void setup() {
       now = time(nullptr);
     }
     Serial.println(now);
+    Serial.println("#ESP:Ready");
   }
 }
 
@@ -148,12 +152,38 @@ void loop() {
     numNewMessages = bot.getUpdates(bot.last_message_received + 1);
   }
   if (WiFi.status() != WL_CONNECTED) {
-    server.handleClient();
+    if(!connect_state){
+      digitalWrite(ledPin, 1);
+    }
+    if(connect_state==2){
+       server.handleClient();
+    }
+    if(connect_state==1){
+      Serial.println("#Lost wifi connection");
+      Serial.print("Connecting to WiFi......");
+        WiFi.mode(WIFI_STA);
+        WiFi.begin(ssid, password);
+        unsigned long startTime = millis();
+        //Serial.print("\nConnecting to WiFi......");
+        while (WiFi.status() != WL_CONNECTED && millis() - startTime < 5000) {
+          Serial.print(".");
+          delay(100);
+        }
+        if(WiFi.status() == WL_CONNECTED){
+            Serial.println("#ESP:Ready");
+            digitalWrite(ledPin, 0);
+        }
+    }
+    if(!connect_state){
+      digitalWrite(ledPin, 1);
+    }
   }
   handleSerialInput();
 }
 
 void setupAP() {
+  connect_state==2;
+  Serial.println("#ESP_AP_mode");
   Serial.println("\nWiFi AP mode");
   WiFi.mode(WIFI_AP);
   // Cấu hình địa chỉ IP tĩnh cho AP
@@ -212,8 +242,11 @@ void handleSerialInput() {
     command.trim(); // Loại bỏ các ký tự xuống dòng và khoảng trắng
     if (command == "AT+ALARM=1") {
       Serial.println("Canh bao chay!!!Ve nha ngay!!!");
-      //bot.sendMessage(CHAT_ID, "Canh bao chay!!!Ve nha ngay!!!");
       bot.sendMessage(CHAT_ID, "🔔🔔🔔Cảnh báo cháy!!!🆘🆘🆘Gọi cứu hỏa ngay!!!");
-    } else {}
+    }
+    else if(command == "AT+RST"){
+      ESP.restart();
+    }
+    else {}
   }
 }
