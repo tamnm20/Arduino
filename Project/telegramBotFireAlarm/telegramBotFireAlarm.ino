@@ -152,15 +152,20 @@ void loop() {
     numNewMessages = bot.getUpdates(bot.last_message_received + 1);
   }
   if (WiFi.status() != WL_CONNECTED) {
+    //Serial.print("connect_state:");
     if(!connect_state){
       digitalWrite(ledPin, 1);
+      connect_state = 1;
+      Serial.println("#ESP:Lost_wifi");
     }
+    //Serial.println(connect_state);
     if(connect_state==2){
        server.handleClient();
+       //Serial.println("server.handleClient");
     }
     if(connect_state==1){
-      Serial.println("#Lost wifi connection");
       Serial.print("Connecting to WiFi......");
+      connect_state = 0;
         WiFi.mode(WIFI_STA);
         WiFi.begin(ssid, password);
         unsigned long startTime = millis();
@@ -172,17 +177,15 @@ void loop() {
         if(WiFi.status() == WL_CONNECTED){
             Serial.println("#ESP:Ready");
             digitalWrite(ledPin, 0);
+            connect_state = 1;
         }
-    }
-    if(!connect_state){
-      digitalWrite(ledPin, 1);
     }
   }
   handleSerialInput();
 }
 
 void setupAP() {
-  connect_state==2;
+  connect_state=2;
   Serial.println("#ESP_AP_mode");
   Serial.println("\nWiFi AP mode");
   WiFi.mode(WIFI_AP);
@@ -243,6 +246,23 @@ void handleSerialInput() {
     if (command == "AT+ALARM=1") {
       Serial.println("Canh bao chay!!!Ve nha ngay!!!");
       bot.sendMessage(CHAT_ID, "🔔🔔🔔Cảnh báo cháy!!!🆘🆘🆘Gọi cứu hỏa ngay!!!");
+    }
+    if (command == "AT+ALARM=2") {
+      Serial.println("Phat hien khi gas!!!");
+      String gas = "🔔🔔🔔Cảnh báo phát hiện khí gas!!!\n\n";
+      gas +="Quy trình xử lý an toàn:\n";
+      gas +="Bước 1: Khóa van bình gas\n";
+      gas +="Bước 2: Mở hết cửa sổ, cửa ra vào để khí gas thoát ra ngoài\n";
+      gas +="- Mở hết các cửa sổ sau khi đã đóng van gas để cho khí gas thoát ra ngoài.\n";
+      gas +="- Bạn có thể sử dụng bìa carton hoặc quạt tay để lùa khí gas ra môi trường.\n";
+      gas +="- Lưu ý không bật quạt điện bởi dễ phát ra tia lửa điện gây cháy.\n";
+      gas +="- Khi quạt, hãy quạt theo phương ngang để khí thoát ra ngoài một cách nhanh chóng.\n";
+      gas +="- Không quạt theo phương thẳng đứng sẽ khiến khí gas bay cao và bạn dễ hít phải.\n";
+      gas +="- Dùng khăn ướt để che mũi lại tránh hít phải khí gas và đưa mọi người trong gia đình nhanh chóng ra khỏi nhà.\n";
+      gas +="Bước 3: Không bật/tắt các công tắc, thiết bị điện trong nhà\n";
+      gas +="- Tuyệt đối không được bật/tắt các công tắc điện, dùng diêm hay bật lửa…..những thứ phát ra tia lửa điện dễ gây bắt lửa dễ dàng.\n";
+      gas +="Bước 4: Bạn cần liên hệ ngay với các cơ sở gas uy tín để được kiểm tra, xử lý kịp thời\n";
+      bot.sendMessage(CHAT_ID, gas);
     }
     else if(command == "AT+RST"){
       ESP.restart();
