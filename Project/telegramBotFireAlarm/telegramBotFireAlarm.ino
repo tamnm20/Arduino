@@ -28,8 +28,8 @@ WiFiClientSecure client;
 UniversalTelegramBot bot(BOTtoken, client);
 
 // Checks for new messages every 1 second.
-int botRequestDelay = 1000;
-unsigned long lastTimeBotRan;
+//int botRequestDelay = 1000;
+//unsigned long lastTimeBotRan;
 
 const int ledPin = 2;
 bool ledState = LOW;
@@ -181,6 +181,10 @@ void loop() {
         }
     }
   }
+  if (digitalRead(ledPin)&& connect_state != 1&& connect_state != 2&&WiFi.status() == WL_CONNECTED){
+    Serial.println("#ESP:Ready");
+    digitalWrite(ledPin, 0);
+  }
   handleSerialInput();
 }
 
@@ -243,11 +247,11 @@ void handleSerialInput() {
   if (Serial.available()) {
     String command = Serial.readStringUntil('\n');
     command.trim(); // Loại bỏ các ký tự xuống dòng và khoảng trắng
-    if (command == "AT+ALARM=1") {
+    if (command == "AT+ALARM=1"&&WiFi.status() == WL_CONNECTED) {
       Serial.println("Canh bao chay!!!Ve nha ngay!!!");
       bot.sendMessage(CHAT_ID, "🔔🔔🔔Cảnh báo cháy!!!🆘🆘🆘Gọi cứu hỏa ngay!!!");
     }
-    if (command == "AT+ALARM=2") {
+    if (command == "AT+ALARM=2"&&WiFi.status() == WL_CONNECTED) {
       Serial.println("Phat hien khi gas!!!");
       String gas = "🔔🔔🔔Cảnh báo phát hiện khí gas!!!\n\n";
       gas +="Quy trình xử lý an toàn:\n";
