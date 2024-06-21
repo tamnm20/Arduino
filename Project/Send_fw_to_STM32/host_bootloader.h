@@ -39,9 +39,13 @@ void ota_send_infor(void)
 	strcpy((char*)&infor.version,"v1.1");
 	bootloader_send_data(&infor,sizeof(infor));
 }
-void ota_send_data(void)
+void ota_send_data(uint8_t * data, uint8_t len)
 {
-	
+	OTAData cmd;
+	cmd.command_id = OTA_DATA;
+	cmd.len = len;
+	memcpy(&cmd.data, data, len);
+	bootloader_send_data(&cmd,sizeof(cmd));
 }
 void app_handler(void)
 {

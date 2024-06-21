@@ -40,6 +40,13 @@ typedef enum
 //     uint8_t version[5];
 // }__attribute__((packed))OTAInfor;
 
+// typedef struct
+// {
+// 	uint8_t command_id;
+// 	uint8_t len;
+// 	uint8_t da[16];
+// }__attribute__((packed))OTAData;
+
 typedef struct
 {
 	uint8_t command_id;
@@ -61,3 +68,10 @@ typedef struct
 	uint8_t name[50];
     uint8_t version[5];
 }OTAInfor;
+
+typedef struct
+{
+	uint8_t command_id;
+	uint8_t len;
+	uint8_t da[16];
+}OTAData;
