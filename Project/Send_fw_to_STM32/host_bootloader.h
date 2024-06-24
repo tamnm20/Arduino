@@ -79,16 +79,44 @@ void app_handler(void)
 			break;
 		case OTA_SEND_INFOR_STATE:
 			{
-				OTACode *ota_code = (OTACode*)recv;
-				if(ota_code->command_id == OTA_CODE && ota_code->ota_code ==REQUEST_CODE)
-				{
-					ota_state = OTA_SEND_DATA_STATE;
+				OTAResponse *response = (OTAResponse*)recv;
+				if(response->command_id == OTA_RESPONSE && response->ack = ACK)				{
+					uint8_t hex_data[21];
+					char* token = strtok(file_hex,"\n");
+					//covert_string_intel
+
 					ota_send_data();
 				}
 				else
 				{
 					ota_state = OTA_IDLE_STATE;
 				}			
+			}
+			break;
+		case OTA_SEND_DATA_STATE:
+			{
+				OTAResponse *response = (OTAResponse*)recv;
+				if(response->command_id == OTA_RESPONSE && response->ack = ACK)				{
+					uint8_t hex_data[21];
+					char* token = strtok(NULL,"\n");
+					//covert_string_intel
+					if(token!=NULL)
+					{
+						if(hex_data[3]==0x00)
+						{
+							ota_send_data();
+						}
+						else
+						{
+							ota_send_code(END_CODE);
+							ota_state = OTA_END_STATE;
+						}
+					}
+					else
+					{
+						ota_send_code(END_CODE);
+					}
+				}		
 			}
 			break;
 		default:

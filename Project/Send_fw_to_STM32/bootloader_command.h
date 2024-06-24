@@ -9,7 +9,7 @@ typedef enum
 typedef enum
 {
 	START_CODE,
-	STOP_CODE,
+	END_CODE,
 	REQUEST_CODE	
 }OTA_Code_Name;
 
